@@ -15,8 +15,12 @@ public final class PreReleaseVersion implements Tuple<Identifier>, Comparable<Pr
     
     private final ImmutableList<Identifier> identifiers;
 
-    public PreReleaseVersion(ImmutableList<Identifier> identifiers) {
+    PreReleaseVersion(ImmutableList<Identifier> identifiers) {
         this.identifiers = identifiers;
+    }
+
+    public static PreReleaseVersion parse(String version) {
+        return new PreReleaseVersionParser().parse(version);
     }
 
     @Override

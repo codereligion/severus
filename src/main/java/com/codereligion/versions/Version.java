@@ -1,15 +1,21 @@
 package com.codereligion.versions;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import java.util.Objects;
 
+import static com.google.common.base.Joiner.on;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Iterables.isEmpty;
+
 @Immutable
 public abstract class Version implements Comparable<Version> {
+    
+    Version() {
+        
+    }
 
     public abstract VersionNumber getMajorVersion();
 
@@ -43,19 +49,24 @@ public abstract class Version implements Comparable<Version> {
 
     @Override
     public int compareTo(@Nonnull Version version) {
-        return Versions.naturalOrdering().compare(this, version);
+        // TODO singleton?
+        return new VersionPrecedence().compare(this, version);
+    }
+    
+    private <I extends Identifier> void append(StringBuilder builder, String prefix, Iterable<I> tuple) {
+        if (isEmpty(tuple)) {
+            return;
+        }
+
+        builder.append(prefix).append(tuple);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        Joiner.on('.').appendTo(builder, getMajorVersion(), getMinorVersion(), getPatchVersion());
-        if (!FluentIterable.from(getPreReleaseVersion()).isEmpty()) {
-            builder.append("-").append(getPreReleaseVersion());
-        }
-        if (!FluentIterable.from(getBuildMetadata()).isEmpty()) {
-            builder.append("+").append(getBuildMetadata());
-        }
+        on('.').appendTo(builder, getMajorVersion(), getMinorVersion(), getPatchVersion());
+        append(builder, "-", getPreReleaseVersion());
+        append(builder, "+", getBuildMetadata());
         return builder.toString();
     }
 
@@ -85,12 +96,16 @@ public abstract class Version implements Comparable<Version> {
     static Version valueOf(final int major, final int minor, final int patch,
                            final String preReleaseVersion, final String buildMetadata) {
         return new ConcreteVersion(
-                new DefaultVersionNumber(major),
-                new DefaultVersionNumber(minor),
-                new DefaultVersionNumber(patch),
-                Versions.PreRelease.parse(preReleaseVersion),
-                Versions.Metadata.parse(buildMetadata)
+                VersionNumber.valueOf(major),
+                VersionNumber.valueOf(minor),
+                VersionNumber.valueOf(patch),
+                PreReleaseVersion.parse(preReleaseVersion),
+                BuildMetadata.parse(buildMetadata)
         );
+    }
+    
+    public static VersionBuilder builder() {
+        return new VersionBuilder();
     }
 
 }

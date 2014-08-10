@@ -14,8 +14,12 @@ public final class BuildMetadata implements Tuple<Name> {
     
     private final ImmutableList<Name> identifiers;
 
-    public BuildMetadata(ImmutableList<Name> identifiers) {
+    BuildMetadata(ImmutableList<Name> identifiers) {
         this.identifiers = identifiers;
+    }
+
+    public static BuildMetadata parse(String metadata) {
+        return new BuildMetadataParser().parse(metadata);
     }
 
     @Override

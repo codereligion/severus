@@ -6,8 +6,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 
-import static com.codereligion.versions.Versions.Metadata;
-import static com.codereligion.versions.Versions.PreRelease;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -54,59 +52,74 @@ public final class VersionParserTest {
 
     @Test
     public void major() {
+        assertThat(unit.getMajorVersion(), is(VersionNumber.valueOf(major)));
+    }
+    
+    @Test
+    public void majorValue() {
         assertThat(unit.getMajorVersion().getValue(), is(major));
     }
 
     @Test
     public void minor() {
+        assertThat(unit.getMinorVersion(), is(VersionNumber.valueOf(minor)));
+    }
+
+    @Test
+    public void minorValue() {
         assertThat(unit.getMinorVersion().getValue(), is(minor));
     }
 
     @Test
     public void patch() {
+        assertThat(unit.getPatchVersion(), is(VersionNumber.valueOf(patch)));
+    }
+
+    @Test
+    public void patchValue() {
         assertThat(unit.getPatchVersion().getValue(), is(patch));
     }
 
     @Test
     public void preRelease() {
-        assertThat(unit.getPreReleaseVersion(), is(PreRelease.parse(preRelease)));
+        assertThat(unit.getPreReleaseVersion(), is(PreReleaseVersion.parse(preRelease)));
     }
     
     @Test
-    public void preReleaseString() {
+    public void preReleaseValue() {
         assertThat(unit.getPreReleaseVersion().toString(), is(preRelease));
     }
 
     @Test
     public void buildMetadata() {
-        assertThat(unit.getBuildMetadata(), is(Metadata.parse(buildMetadata)));
+        assertThat(unit.getBuildMetadata(), is(BuildMetadata.parse(buildMetadata)));
     }
 
     @Test
-    public void buildMetadataString() {
+    public void buildMetadataValue() {
         assertThat(unit.getBuildMetadata().toString(), is(buildMetadata));
     }
 
     @Test
-    public void equals() {
+    public void equalVersionShouldBeEqual() {
         final Version expected = Version.valueOf(major, minor, patch, preRelease, buildMetadata);
         assertThat(unit, is(expected));
     }
 
     @Test
-    public void hashCodeShouldWork() {
+    public void equalVersionShouldHaveSameHashCode() {
         final Version expected = Version.valueOf(major, minor, patch, preRelease, buildMetadata);
         assertThat(unit.hashCode(), is(expected.hashCode()));
     }
     
     @Test
-    public void comparesTo() {
+    public void equalVersionShouldCompareEqual() {
         final Version expected = Version.valueOf(major, minor, patch, preRelease, buildMetadata);
         assertThat(unit, comparesEqualTo(expected));
     }
     
     @Test
-    public void toStringShouldWork() {
+    public void stringValueShouldMatchOriginalInput() {
         assertThat(unit.toString(), is(version));
     }
 

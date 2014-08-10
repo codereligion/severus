@@ -6,6 +6,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
 import static com.google.common.collect.FluentIterable.from;
+import static java.lang.Integer.parseInt;
 
 final class PreReleaseVersionParser implements Parser<PreReleaseVersion> {
 
@@ -26,9 +27,9 @@ final class PreReleaseVersionParser implements Parser<PreReleaseVersion> {
             @Override
             public Identifier apply(final String s) {
                 if (CharMatcher.inRange('0', '9').matchesAllOf(s)) {
-                    return Versions.Numbers.parse(s);
+                    return new VersionNumber(parseInt(s));
                 } else {
-                    return new DefaultName(s);
+                    return new Name(s);
                 }
             }
         };

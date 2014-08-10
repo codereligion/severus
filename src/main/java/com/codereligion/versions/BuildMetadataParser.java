@@ -24,7 +24,7 @@ final class BuildMetadataParser implements Parser<BuildMetadata> {
         return new Function<String, Name>() {
             @Override
             public Name apply(final String s) {
-                return new DefaultName(s);
+                return new Name(s);
             }
         };
     }
