@@ -20,22 +20,22 @@ final class ConcreteVersion extends Version {
     }
 
     @Override
-    public VersionNumber getMajorVersion() {
+    public VersionNumber getMajor() {
         return major;
     }
 
     @Override
-    public VersionNumber getMinorVersion() {
+    public VersionNumber getMinor() {
         return minor;
     }
 
     @Override
-    public VersionNumber getPatchVersion() {
+    public VersionNumber getPatch() {
         return patch;
     }
 
     @Override
-    public PreReleaseVersion getPreReleaseVersion() {
+    public PreReleaseVersion getPreRelease() {
         return preRelease;
     }
 

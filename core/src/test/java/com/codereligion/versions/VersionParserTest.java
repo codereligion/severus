@@ -13,24 +13,36 @@ import static org.junit.Assert.assertThat;
 @RunWith(Parameterized.class)
 public final class VersionParserTest {
 
-    private final Version unit;
+    private final Version actual;
     
     private final String version;
     private final int major;
     private final int minor;
     private final int patch;
     private final String preRelease;
-    private final String buildMetadata;
+    private final String metadata;
+    
+    private final Version expected;
 
     public VersionParserTest(String version, int major, int minor, int patch,
-                             String preRelease, String buildMetadata) {
-        this.unit = Version.valueOf(version);
+                             String preRelease, String metadata) {
+        
+        this.actual = Version.parse(version);
+        
         this.version = version;
         this.major = major;
         this.minor = minor;
         this.patch = patch;
         this.preRelease = preRelease;
-        this.buildMetadata = buildMetadata;
+        this.metadata = metadata;
+        
+        this.expected = Version.builder().
+                major(major).
+                minor(minor).
+                patch(patch).
+                preRelease(preRelease).
+                buildMetadata(metadata).
+                build();
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -52,75 +64,72 @@ public final class VersionParserTest {
 
     @Test
     public void major() {
-        assertThat(unit.getMajorVersion(), is(VersionNumber.valueOf(major)));
+        assertThat(actual.getMajor(), is(VersionNumber.valueOf(major)));
     }
-    
+
     @Test
     public void majorValue() {
-        assertThat(unit.getMajorVersion().getValue(), is(major));
+        assertThat(actual.getMajor().getValue(), is(major));
     }
 
     @Test
     public void minor() {
-        assertThat(unit.getMinorVersion(), is(VersionNumber.valueOf(minor)));
+        assertThat(actual.getMinor(), is(VersionNumber.valueOf(minor)));
     }
 
     @Test
     public void minorValue() {
-        assertThat(unit.getMinorVersion().getValue(), is(minor));
+        assertThat(actual.getMinor().getValue(), is(minor));
     }
 
     @Test
     public void patch() {
-        assertThat(unit.getPatchVersion(), is(VersionNumber.valueOf(patch)));
+        assertThat(actual.getPatch(), is(VersionNumber.valueOf(patch)));
     }
 
     @Test
     public void patchValue() {
-        assertThat(unit.getPatchVersion().getValue(), is(patch));
+        assertThat(actual.getPatch().getValue(), is(patch));
     }
 
     @Test
     public void preRelease() {
-        assertThat(unit.getPreReleaseVersion(), is(PreReleaseVersion.parse(preRelease)));
+        assertThat(actual.getPreRelease(), is(PreReleaseVersion.parse(preRelease)));
     }
-    
+
     @Test
     public void preReleaseValue() {
-        assertThat(unit.getPreReleaseVersion().toString(), is(preRelease));
+        assertThat(actual.getPreRelease().toString(), is(preRelease));
     }
 
     @Test
     public void buildMetadata() {
-        assertThat(unit.getBuildMetadata(), is(BuildMetadata.parse(buildMetadata)));
+        assertThat(actual.getBuildMetadata(), is(BuildMetadata.parse(metadata)));
     }
 
     @Test
     public void buildMetadataValue() {
-        assertThat(unit.getBuildMetadata().toString(), is(buildMetadata));
+        assertThat(actual.getBuildMetadata().toString(), is(metadata));
     }
 
     @Test
     public void equalVersionShouldBeEqual() {
-        final Version expected = Version.valueOf(major, minor, patch, preRelease, buildMetadata);
-        assertThat(unit, is(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
     public void equalVersionShouldHaveSameHashCode() {
-        final Version expected = Version.valueOf(major, minor, patch, preRelease, buildMetadata);
-        assertThat(unit.hashCode(), is(expected.hashCode()));
+        assertThat(actual.hashCode(), is(expected.hashCode()));
     }
     
     @Test
     public void equalVersionShouldCompareEqual() {
-        final Version expected = Version.valueOf(major, minor, patch, preRelease, buildMetadata);
-        assertThat(unit, comparesEqualTo(expected));
+        assertThat(actual, comparesEqualTo(expected));
     }
     
     @Test
     public void stringValueShouldMatchOriginalInput() {
-        assertThat(unit.toString(), is(version));
+        assertThat(actual.toString(), is(version));
     }
 
 }
