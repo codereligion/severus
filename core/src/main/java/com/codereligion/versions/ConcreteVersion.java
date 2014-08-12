@@ -9,14 +9,17 @@ final class ConcreteVersion extends Version {
     private final VersionNumber minor;
     private final VersionNumber patch;
     private final PreReleaseVersion preRelease;
-    private final BuildMetadata buildMetadata;
+    private final BuildMetadata build;
+    private final VersionPrecedence precedence;
 
-    public ConcreteVersion(VersionNumber major, VersionNumber minor, VersionNumber patch, PreReleaseVersion preRelease, BuildMetadata buildMetadata) {
+    public ConcreteVersion(VersionNumber major, VersionNumber minor, VersionNumber patch, PreReleaseVersion preRelease,
+                           BuildMetadata build, VersionPrecedence precedence) {
         this.major = major;
         this.minor = minor;
         this.patch = patch;
         this.preRelease = preRelease;
-        this.buildMetadata = buildMetadata;
+        this.build = build;
+        this.precedence = precedence;
     }
 
     @Override
@@ -40,8 +43,13 @@ final class ConcreteVersion extends Version {
     }
 
     @Override
-    public BuildMetadata getBuildMetadata() {
-        return buildMetadata;
+    public BuildMetadata getBuild() {
+        return build;
     }
 
+    @Override
+    VersionPrecedence getPrecedence() {
+        return precedence;
+    }
+    
 }

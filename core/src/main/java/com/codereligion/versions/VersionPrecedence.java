@@ -1,52 +1,60 @@
 package com.codereligion.versions;
 
+import com.google.common.base.Equivalence;
 import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Ordering;
 
 import javax.annotation.concurrent.Immutable;
+import java.util.Comparator;
+import java.util.Objects;
 
-// TODO singleton!
 @Immutable
-final class VersionPrecedence extends Ordering<Version> {
+public abstract class VersionPrecedence extends Equivalence<Version> implements Comparator<Version> {
+    
+    private VersionPrecedence() {
+        // not to be used outside
+    }
 
-    private final IdentifierPrecedence precedence = new IdentifierPrecedence();
-    private final PreReleaseVersionPrecedence comparator = new PreReleaseVersionPrecedence();
+    public static final VersionPrecedence NATURAL = new VersionPrecedence() {
+        
+        @Override
+        public int compare(Version left, Version right) {
+            return ComparisonChain.start().
+                    compare(left.getMajor(), right.getMajor(), IdentifierPrecedence.NATURAL).
+                    compare(left.getMinor(), right.getMinor(), IdentifierPrecedence.NATURAL).
+                    compare(left.getPatch(), right.getPatch(), IdentifierPrecedence.NATURAL).
+                    compare(left.getPreRelease(), right.getPreRelease(), PreReleaseVersionPrecedence.LEXICOGRAPHICAL).
+                    result();
+        }
 
+        @Override
+        protected int doHash(Version version) {
+            return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(),
+                    version.getPreRelease());
+        }
+        
+    };
+    
+    public static final VersionPrecedence BUILD = new VersionPrecedence() {
+        
+        @Override
+        public int compare(Version left, Version right) {
+            return ComparisonChain.start().
+                    compare(left, right, NATURAL).
+                    compare(left.getBuild(), right.getBuild(), BuildMetadataPrecedence.LEXICOGRAPHICAL).
+                    result();
+        }
+
+        @Override
+        protected int doHash(Version version) {
+            return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(), 
+                    version.getPreRelease(), version.getBuild());
+        }
+        
+    };
+    
     @Override
-    public int compare(Version left, Version right) {
-        return ComparisonChain.start().
-                compare(left.getMajor(), right.getMajor(), precedence).
-                compare(left.getMinor(), right.getMinor(), precedence).
-                compare(left.getPatch(), right.getPatch(), precedence).
-                compare(left.getPreRelease(), right.getPreRelease(), comparator).
-                result();
+    protected boolean doEquivalent(Version left, Version right) {
+        return compare(left, right) == 0;
     }
 
-    private static final class IdentifierPrecedence extends Ordering<Identifier<?>> {
-
-        @Override
-        public int compare(Identifier<?> left, Identifier<?> right) {
-            return ComparisonChain.start().
-                    compareFalseFirst(left instanceof Name, right instanceof Name).
-                    compare(left.getValue(), right.getValue()).
-                    result();
-        }
-
-    }
-
-    private static final class PreReleaseVersionPrecedence extends Ordering<PreReleaseVersion> {
-
-        private final IdentifierPrecedence precedence = new IdentifierPrecedence();
-
-        @Override
-        public int compare(PreReleaseVersion left, PreReleaseVersion right) {
-
-            return ComparisonChain.start().
-                    compare(left.isEmpty(), right.isEmpty()).
-                    compare(left, right, precedence.lexicographical()).
-                    result();
-        }
-    
-    }
-    
 }

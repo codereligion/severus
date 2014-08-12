@@ -1,15 +1,40 @@
 package com.codereligion.versions;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Strings.nullToEmpty;
+import static java.util.regex.Pattern.compile;
 
 public final class VersionBuilder {
+
+    private static final Pattern PATTERN = compile(
+            "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-([.0-9A-Za-z-]+))?(?:\\+([.0-9A-Za-z-]+))?");
     
     private VersionNumber major = VersionNumber.valueOf(0);
     private VersionNumber minor = VersionNumber.valueOf(0);
     private VersionNumber patch = VersionNumber.valueOf(0);
     private PreReleaseVersion preRelease = PreReleaseVersion.empty();
-    private BuildMetadata metadata = BuildMetadata.empty();
-    
+    private BuildMetadata build = BuildMetadata.empty();
+    private VersionPrecedence precedence = VersionPrecedence.NATURAL;
+
+    public VersionBuilder parse(String version) {
+        checkNotNull(version, "Version");
+        
+        final Matcher matcher = PATTERN.matcher(version);
+        checkArgument(matcher.matches(), "[%s] doesn't match [%s]", version, PATTERN);
+
+        major(matcher.group(1));
+        minor(matcher.group(2));
+        patch(matcher.group(3));
+        preRelease(nullToEmpty(matcher.group(4)));
+        buildMetadata(nullToEmpty(matcher.group(5)));
+        
+        return this;
+    }
+
     public VersionBuilder major(int major) {
         return major(VersionNumber.valueOf(major));
     }
@@ -58,17 +83,22 @@ public final class VersionBuilder {
         return this;
     }
     
-    public VersionBuilder buildMetadata(String metadata) {
-        return buildMetadata(BuildMetadata.parse(metadata));
+    public VersionBuilder buildMetadata(String build) {
+        return buildMetadata(BuildMetadata.parse(build));
     }
     
-    public VersionBuilder buildMetadata(BuildMetadata metadata) {
-        this.metadata = checkNotNull(metadata, "BuildMetadata");
+    public VersionBuilder buildMetadata(BuildMetadata build) {
+        this.build = checkNotNull(build, "BuildMetadata");
         return this;
     }
     
-    public Version build() {
-        return new ConcreteVersion(major, minor, patch, preRelease, metadata);
+    public VersionBuilder precendence(VersionPrecedence precedence) {
+        this.precedence = precedence;
+        return this;
+    }
+    
+    public Version create() {
+        return new ConcreteVersion(major, minor, patch, preRelease, build, precedence);
     }
     
 }

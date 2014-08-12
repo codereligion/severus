@@ -64,14 +64,14 @@ public final class BuildMetadata implements Tuple<Name> {
         return EMPTY;
     }
 
-    public static BuildMetadata parse(final String metadata) {
-        checkNotNull(metadata, "BuildMetadata");
+    public static BuildMetadata parse(final String build) {
+        checkNotNull(build, "BuildMetadata");
         
-        if (metadata.isEmpty()) {
+        if (build.isEmpty()) {
             return empty();
         }
 
-        return valueOf(Splitter.on('.').split(metadata));
+        return valueOf(Splitter.on('.').split(build));
     }
     
     public static BuildMetadata valueOf(final Iterable<String> values) {

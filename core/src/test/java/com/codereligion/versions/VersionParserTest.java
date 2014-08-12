@@ -42,7 +42,7 @@ public final class VersionParserTest {
                 patch(patch).
                 preRelease(preRelease).
                 buildMetadata(metadata).
-                build();
+                create();
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -104,12 +104,12 @@ public final class VersionParserTest {
 
     @Test
     public void buildMetadata() {
-        assertThat(actual.getBuildMetadata(), is(BuildMetadata.parse(metadata)));
+        assertThat(actual.getBuild(), is(BuildMetadata.parse(metadata)));
     }
 
     @Test
     public void buildMetadataValue() {
-        assertThat(actual.getBuildMetadata().toString(), is(metadata));
+        assertThat(actual.getBuild().toString(), is(metadata));
     }
 
     @Test

@@ -5,14 +5,14 @@ import javax.annotation.concurrent.Immutable;
 import java.util.Objects;
 
 import static com.google.common.base.Joiner.on;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.isEmpty;
 
+// TODO serializable?
 @Immutable
 public abstract class Version implements Comparable<Version> {
 
     Version() {
-        
+
     }
 
     public abstract VersionNumber getMajor();
@@ -23,7 +23,9 @@ public abstract class Version implements Comparable<Version> {
 
     public abstract PreReleaseVersion getPreRelease();
 
-    public abstract BuildMetadata getBuildMetadata();
+    public abstract BuildMetadata getBuild();
+
+    abstract VersionPrecedence getPrecedence();
 
     @Override
     public boolean equals(Object that) {
@@ -31,10 +33,8 @@ public abstract class Version implements Comparable<Version> {
             return true;
         } else if (that instanceof Version) {
             final Version other = (Version) that;
-            return Objects.equals(getMajor(), other.getMajor()) &&
-                    Objects.equals(getMinor(), other.getMinor()) &&
-                    Objects.equals(getPatch(), other.getPatch()) &&
-                    Objects.equals(getPreRelease(), other.getPreRelease());
+            return Objects.equals(getPrecedence(), other.getPrecedence()) &&
+                    getPrecedence().equivalent(this, other);
         } else {
             return false;
         }
@@ -42,21 +42,20 @@ public abstract class Version implements Comparable<Version> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMajor(), getMinor(), getPatch(), getPreRelease());
+        return getPrecedence().hash(this);
     }
 
     @Override
     public int compareTo(@Nonnull Version version) {
-        // TODO singleton?
-        return new VersionPrecedence().compare(this, version);
+        return getPrecedence().compare(this, version);
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         on('.').appendTo(builder, getMajor(), getMinor(), getPatch());
         append(builder, "-", getPreRelease());
-        append(builder, "+", getBuildMetadata());
+        append(builder, "+", getBuild());
         return builder.toString();
     }
 
@@ -69,19 +68,19 @@ public abstract class Version implements Comparable<Version> {
     }
 
     public static Version parse(String version) {
-        return VersionParser.parse(checkNotNull(version, "Version"));
+        return builder().parse(version).create();
     }
-    
+
     public static Version valueOf(final int major) {
-        return builder().major(major).build();
+        return builder().major(major).create();
     }
 
     public static Version valueOf(final int major, final int minor) {
-        return builder().major(major).minor(minor).build();
+        return builder().major(major).minor(minor).create();
     }
 
     public static Version valueOf(final int major, final int minor, final int patch) {
-        return builder().major(major).minor(minor).patch(patch).build();
+        return builder().major(major).minor(minor).patch(patch).create();
     }
 
     public static VersionBuilder builder() {
