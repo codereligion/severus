@@ -34,7 +34,7 @@ public final class VersionBuilder {
         minor(matcher.group(2));
         patch(matcher.group(3));
         preRelease(nullToEmpty(matcher.group(4)));
-        buildMetadata(nullToEmpty(matcher.group(5)));
+        build(nullToEmpty(matcher.group(5)));
         
         return this;
     }
@@ -87,11 +87,11 @@ public final class VersionBuilder {
         return this;
     }
     
-    public VersionBuilder buildMetadata(String build) {
-        return buildMetadata(BuildMetadata.valueOf(build));
+    public VersionBuilder build(String build) {
+        return build(BuildMetadata.valueOf(build));
     }
     
-    public VersionBuilder buildMetadata(BuildMetadata build) {
+    public VersionBuilder build(BuildMetadata build) {
         this.build = checkNotNull(build, "BuildMetadata");
         return this;
     }

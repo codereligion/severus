@@ -1,135 +1,208 @@
 package com.codereligion.versions;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import org.jukito.All;
+import org.jukito.JukitoModule;
+import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import static com.google.common.base.Objects.firstNonNull;
+import static com.google.common.collect.FluentIterable.from;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(Parameterized.class)
+@RunWith(JukitoRunner.class)
 public final class VersionParserTest {
 
-    private final Version actual;
-    
-    private final String version;
-    private final int major;
-    private final int minor;
-    private final int patch;
-    private final String preRelease;
-    private final String metadata;
-    
-    private final Version expected;
+    private static final class Example {
+        public final Input input;
+        public final Output output;
 
-    public VersionParserTest(String version, int major, int minor, int patch,
-                             String preRelease, String metadata) {
-        
-        this.actual = Version.valueOf(version);
-        
-        this.version = version;
-        this.major = major;
-        this.minor = minor;
-        this.patch = patch;
-        this.preRelease = preRelease;
-        this.metadata = metadata;
-        
-        this.expected = Version.builder().
-                major(major).
-                minor(minor).
-                patch(patch).
-                preRelease(preRelease).
-                buildMetadata(metadata).
-                create();
+        private Example(Input input, Output output) {
+            this.input = input;
+            this.output = output;
+        }
     }
 
-    @Parameterized.Parameters(name = "{0}")
-    public static Iterable<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {"0.2.1", 0, 2, 1, "", ""},
-                {"0.2.0", 0, 2, 0, "", ""},
-                {"3.0.0", 3, 0, 0, "", ""},
-                {"3.0.1", 3, 0, 1, "", ""},
-                {"3.2.0", 3, 2, 0, "", ""},
-                {"3.2.1", 3, 2, 1, "", ""},
-                {"1.0.0-rc1", 1, 0, 0, "rc1", ""},
-                {"1.0.0-rc1-0.5", 1, 0, 0, "rc1-0.5", ""},
-                {"1.0.0+5e84d09", 1, 0, 0, "", "5e84d09"},
-                {"1.0.0+git.5e84d09", 1, 0, 0, "", "git.5e84d09"},
-                {"1.0.0-rc1-0.5+git.5e84d09", 1, 0, 0, "rc1-0.5", "git.5e84d09"},
-        });
+    private static final class Input {
+        public final String version;
+
+        private Input(String version) {
+            this.version = version;
+        }
     }
 
-    @Test
-    public void major() {
-        assertThat(actual.getMajor(), is(VersionNumber.valueOf(major)));
+    private static final class Output {
+        public final int major;
+        public final int minor;
+        public final int patch;
+        public final Iterable<String> preRelease;
+        public final Iterable<String> build;
+
+        private Output(int major, int minor, int patch, List<String> preRelease, List<String> build) {
+            this.major = major;
+            this.minor = minor;
+            this.patch = patch;
+            this.preRelease = firstNonNull(preRelease, Collections.<String>emptyList());
+            this.build = firstNonNull(build, Collections.<String>emptyList());
+        }
+
+        public Version getExpected(VersionPrecedence precedence) {
+            return Version.builder().
+                    major(major).
+                    minor(minor).
+                    patch(patch).
+                    preRelease(Joiner.on('.').join(preRelease)).
+                    build(Joiner.on('.').join(build)).
+                    precendence(precedence).
+                    create();
+        }
     }
 
-    @Test
-    public void majorValue() {
-        assertThat(actual.getMajor().getValue(), is(major));
-    }
+    @SuppressWarnings("UnusedDeclaration")
+    public static class Module extends JukitoModule {
 
-    @Test
-    public void minor() {
-        assertThat(actual.getMinor(), is(VersionNumber.valueOf(minor)));
-    }
+        @Override
+        protected void configureTest() {
+            bindManyInstances(Example.class,
+                    new Example(
+                            new Input("0.2.1"),
+                            new Output(0, 2, 1, null, null)),
+                    new Example(
+                            new Input("0.2.0"),
+                            new Output(0, 2, 0, null, null)),
+                    new Example(
+                            new Input("3.0.0"),
+                            new Output(3, 0, 0, null, null)),
+                    new Example(
+                            new Input("3.0.1"),
+                            new Output(3, 0, 1, null, null)),
+                    new Example(
+                            new Input("3.2.0"),
+                            new Output(3, 2, 0, null, null)),
+                    new Example(
+                            new Input("3.2.1"),
+                            new Output(3, 2, 1, null, null)),
+                    new Example(
+                            new Input("1.0.0-rc1.2"),
+                            new Output(1, 0, 0, asList("rc1", "2"), null)),
+                    new Example(
+                            new Input("1.0.0-rc1-0.5"),
+                            new Output(1, 0, 0, asList("rc1-0", "5"), null)),
+                    new Example(
+                            new Input("1.0.0+5e84d09"),
+                            new Output(1, 0, 0, null, asList("5e84d09"))),
+                    new Example(
+                            new Input("1.0.0+git.5e84d09"),
+                            new Output(1, 0, 0, null, asList("git", "5e84d09"))),
+                    new Example(
+                            new Input("1.0.0-rc1-0.5+git.5e84d09"),
+                            new Output(1, 0, 0, asList("rc1-0", "5"), asList("git", "5e84d09"))));
 
-    @Test
-    public void minorValue() {
-        assertThat(actual.getMinor().getValue(), is(minor));
-    }
+            bindManyInstances(VersionPrecedence.class,
+                    VersionPrecedence.NATURAL, VersionPrecedence.BUILD);
+        }
 
-    @Test
-    public void patch() {
-        assertThat(actual.getPatch(), is(VersionNumber.valueOf(patch)));
-    }
-
-    @Test
-    public void patchValue() {
-        assertThat(actual.getPatch().getValue(), is(patch));
-    }
-
-    @Test
-    public void preRelease() {
-        assertThat(actual.getPreRelease(), is(PreReleaseVersion.valueOf(preRelease)));
-    }
-
-    @Test
-    public void preReleaseValue() {
-        assertThat(actual.getPreRelease().toString(), is(preRelease));
-    }
-
-    @Test
-    public void buildMetadata() {
-        assertThat(actual.getBuild(), is(BuildMetadata.valueOf(metadata)));
     }
 
     @Test
-    public void buildMetadataValue() {
-        assertThat(actual.getBuild().toString(), is(metadata));
+    public void major(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getMajor(), is(VersionNumber.valueOf(example.output.major)));
     }
 
     @Test
-    public void equalVersionShouldBeEqual() {
-        assertThat(actual, is(expected));
+    public void majorValue(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getMajor().getValue(), is(example.output.major));
     }
 
     @Test
-    public void equalVersionShouldHaveSameHashCode() {
-        assertThat(actual.hashCode(), is(expected.hashCode()));
+    public void minor(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getMinor(), is(VersionNumber.valueOf(example.output.minor)));
     }
-    
+
     @Test
-    public void equalVersionShouldCompareEqual() {
-        assertThat(actual, comparesEqualTo(expected));
+    public void minorValue(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getMinor().getValue(), is(example.output.minor));
     }
-    
+
     @Test
-    public void stringValueShouldMatchOriginalInput() {
-        assertThat(actual.toString(), is(version));
+    public void patch(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getPatch(), is(VersionNumber.valueOf(example.output.patch)));
+    }
+
+    @Test
+    public void patchValue(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getPatch().getValue(), is(example.output.patch));
+    }
+
+    @Test
+    public void preRelease(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getPreRelease(), is(PreReleaseVersion.valueOf(example.output.preRelease)));
+    }
+
+    @Test
+    public void preReleaseValue(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(from(unit.getPreRelease()).transform(toValue()).toList(), is(example.output.preRelease));
+    }
+
+    @Test
+    public void build(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.getBuild(), is(BuildMetadata.valueOf(example.output.build)));
+    }
+
+    @Test
+    public void buildValue(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(from(unit.getBuild()).transform(toValue()).toList(), is(example.output.build));
+    }
+
+    @Test
+    public void equalVersionShouldBeEqual(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit, is(example.output.getExpected(precedence)));
+    }
+
+    @Test
+    public void equalVersionShouldHaveSameHashCode(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.hashCode(), is(example.output.getExpected(precedence).hashCode()));
+    }
+
+    @Test
+    public void equalVersionShouldCompareEqual(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit, comparesEqualTo(example.output.getExpected(precedence)));
+    }
+
+    @Test
+    public void stringValueShouldMatchOriginalInput(@All Example example, @All VersionPrecedence precedence) {
+        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        assertThat(unit.toString(), is(example.input.version));
+    }
+
+    private Function<Identifier<?>, String> toValue() {
+        return new Function<Identifier<?>, String>() {
+            @Override
+            public String apply(Identifier<?> input) {
+                return input.getValue().toString();
+            }
+        };
     }
 
 }
