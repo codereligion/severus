@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.nullToEmpty;
+import static java.lang.String.format;
 import static java.util.regex.Pattern.compile;
 
 public final class VersionBuilder {
@@ -24,11 +25,14 @@ public final class VersionBuilder {
         // should only be accessible from static factory method
     }
 
-    public VersionBuilder parse(String version) {
+    public VersionBuilder parse(String version) throws VersionFormatException {
         checkNotNull(version, "Version");
         
         final Matcher matcher = PATTERN.matcher(version);
-        checkArgument(matcher.matches(), "[%s] doesn't match [%s]", version, PATTERN);
+        
+        if (!matcher.matches()) {
+            throw new VersionFormatException(format("[%s] doesn't match [%s]", version, PATTERN));
+        }
 
         major(matcher.group(1));
         minor(matcher.group(2));

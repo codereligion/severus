@@ -54,7 +54,7 @@ public abstract class Version implements Comparable<Version> {
         return converter().reverse().convert(this);
     }
 
-    public static Version valueOf(String version) {
+    public static Version valueOf(String version) throws VersionFormatException {
         return converter().convert(version);
     }
 

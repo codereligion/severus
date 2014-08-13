@@ -8,11 +8,11 @@ public final class VersionRange {
         // static factory
     }
     
-    public static Range<Version> valueOf(String range) {
+    public static Range<Version> valueOf(String range) throws VersionFormatException {
         throw new UnsupportedOperationException();
     }
     
-    public static Range<Version> valueOf(String range, VersionPrecedence precedence) {
+    public static Range<Version> valueOf(String range, VersionPrecedence precedence) throws VersionFormatException {
         throw new UnsupportedOperationException();
     }
     

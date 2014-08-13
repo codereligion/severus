@@ -1,0 +1,4 @@
+#!/bin/sh
+
+directory=$(dirname $(dirname $0))
+java -jar ${directory}/target/versions-cli-*-deps.jar $*
