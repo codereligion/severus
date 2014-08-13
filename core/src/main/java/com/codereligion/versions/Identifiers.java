@@ -12,11 +12,11 @@ public final class Identifiers {
         // static factory
     }
 
-    public static Identifier parse(final String value) {
+    public static Identifier valueOf(final String value) {
         checkNotNull(value, "Value");
         
         if (DIGIT.matchesAllOf(value)) {
-            return VersionNumber.parse(value);
+            return VersionNumber.valueOf(value);
         } else {
             return Name.valueOf(value);
         }

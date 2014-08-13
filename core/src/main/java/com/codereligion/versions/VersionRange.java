@@ -8,7 +8,7 @@ public final class VersionRange {
         // static factory
     }
     
-    public static Range<Version> parse(final String expression) {
+    public static Range<Version> valueOf(final String range) {
         throw new UnsupportedOperationException();
     }
     

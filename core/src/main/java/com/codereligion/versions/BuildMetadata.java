@@ -64,7 +64,7 @@ public final class BuildMetadata implements Tuple<Name> {
         return EMPTY;
     }
 
-    public static BuildMetadata parse(final String build) {
+    public static BuildMetadata valueOf(final String build) {
         checkNotNull(build, "BuildMetadata");
         
         if (build.isEmpty()) {

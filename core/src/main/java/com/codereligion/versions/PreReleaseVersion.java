@@ -64,7 +64,7 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>> {
         return EMPTY;
     }
 
-    public static PreReleaseVersion parse(final String version) {
+    public static PreReleaseVersion valueOf(final String version) {
         checkNotNull(version, "Version");
         
         if (version.isEmpty()) {
@@ -84,7 +84,7 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>> {
         return new Function<String, Identifier<?>>() {
             @Override
             public Identifier apply(final String value) {
-                return Identifiers.parse(value);
+                return Identifiers.valueOf(value);
             }
         };
     }

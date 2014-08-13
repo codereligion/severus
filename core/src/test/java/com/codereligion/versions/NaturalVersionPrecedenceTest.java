@@ -16,20 +16,20 @@ import static org.junit.Assert.assertThat;
 public final class NaturalVersionPrecedenceTest {
 
     private static final ImmutableList<Version> NATURALS = ImmutableList.of(
-            Version.parse("1.0.0-alpha+001"),
-            Version.parse("1.0.0-alpha+002"),
-            Version.parse("1.0.0-alpha"),
-            Version.parse("1.0.0-alpha.1"),
-            Version.parse("1.0.0-alpha.beta"),
-            Version.parse("1.0.0-beta"),
-            Version.parse("1.0.0-beta+exp.sha.5e84d09"),
-            Version.parse("1.0.0-beta+exp.sha.5114f85"),
-            Version.parse("1.0.0-beta.2"),
-            Version.parse("1.0.0-beta.11"),
-            Version.parse("1.0.0-rc.1"),
-            Version.parse("1.0.0+20140813002312"),
-            Version.parse("1.0.0"),
-            Version.parse("1.0.0+20130313144700"));
+            Version.valueOf("1.0.0-alpha+001"),
+            Version.valueOf("1.0.0-alpha+002"),
+            Version.valueOf("1.0.0-alpha"),
+            Version.valueOf("1.0.0-alpha.1"),
+            Version.valueOf("1.0.0-alpha.beta"),
+            Version.valueOf("1.0.0-beta"),
+            Version.valueOf("1.0.0-beta+exp.sha.5e84d09"),
+            Version.valueOf("1.0.0-beta+exp.sha.5114f85"),
+            Version.valueOf("1.0.0-beta.2"),
+            Version.valueOf("1.0.0-beta.11"),
+            Version.valueOf("1.0.0-rc.1"),
+            Version.valueOf("1.0.0+20140813002312"),
+            Version.valueOf("1.0.0"),
+            Version.valueOf("1.0.0+20130313144700"));
     
     private final ImmutableList<Version> input;
 

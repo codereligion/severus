@@ -42,7 +42,7 @@ public final class VersionNumber implements Identifier<Integer> {
         return new VersionNumber(checkNonNegative(value));
     }
     
-    public static VersionNumber parse(String value) {
+    public static VersionNumber valueOf(String value) {
         checkNotNull(value, "Value");
         checkNotEmpty(value);
         checkNoLeadingZero(value);

@@ -27,7 +27,7 @@ public final class VersionParserTest {
     public VersionParserTest(String version, int major, int minor, int patch,
                              String preRelease, String metadata) {
         
-        this.actual = Version.parse(version);
+        this.actual = Version.valueOf(version);
         
         this.version = version;
         this.major = major;
@@ -94,7 +94,7 @@ public final class VersionParserTest {
 
     @Test
     public void preRelease() {
-        assertThat(actual.getPreRelease(), is(PreReleaseVersion.parse(preRelease)));
+        assertThat(actual.getPreRelease(), is(PreReleaseVersion.valueOf(preRelease)));
     }
 
     @Test
@@ -104,7 +104,7 @@ public final class VersionParserTest {
 
     @Test
     public void buildMetadata() {
-        assertThat(actual.getBuild(), is(BuildMetadata.parse(metadata)));
+        assertThat(actual.getBuild(), is(BuildMetadata.valueOf(metadata)));
     }
 
     @Test

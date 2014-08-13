@@ -19,6 +19,10 @@ public final class VersionBuilder {
     private PreReleaseVersion preRelease = PreReleaseVersion.empty();
     private BuildMetadata build = BuildMetadata.empty();
     private VersionPrecedence precedence = VersionPrecedence.NATURAL;
+    
+    VersionBuilder() {
+        // should only be accessible from static factory method
+    }
 
     public VersionBuilder parse(String version) {
         checkNotNull(version, "Version");
@@ -40,7 +44,7 @@ public final class VersionBuilder {
     }
     
     public VersionBuilder major(String major) {
-        return major(VersionNumber.parse(major));
+        return major(VersionNumber.valueOf(major));
     }
     
     public VersionBuilder major(VersionNumber major) {
@@ -53,7 +57,7 @@ public final class VersionBuilder {
     }
     
     public VersionBuilder minor(String minor) {
-        return minor(VersionNumber.parse(minor));
+        return minor(VersionNumber.valueOf(minor));
     }
     
     public VersionBuilder minor(VersionNumber minor) {
@@ -66,7 +70,7 @@ public final class VersionBuilder {
     }
     
     public VersionBuilder patch(String patch) {
-        return patch(VersionNumber.parse(patch));
+        return patch(VersionNumber.valueOf(patch));
     }
     
     public VersionBuilder patch(VersionNumber patch) {
@@ -75,7 +79,7 @@ public final class VersionBuilder {
     }
     
     public VersionBuilder preRelease(String version) {
-        return preRelease(PreReleaseVersion.parse(version));
+        return preRelease(PreReleaseVersion.valueOf(version));
     }
     
     public VersionBuilder preRelease(PreReleaseVersion preRelease) {
@@ -84,7 +88,7 @@ public final class VersionBuilder {
     }
     
     public VersionBuilder buildMetadata(String build) {
-        return buildMetadata(BuildMetadata.parse(build));
+        return buildMetadata(BuildMetadata.valueOf(build));
     }
     
     public VersionBuilder buildMetadata(BuildMetadata build) {
