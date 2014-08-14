@@ -31,6 +31,7 @@ public final class VersionBuilder {
         final Matcher matcher = PATTERN.matcher(version);
         
         if (!matcher.matches()) {
+            // TODO improve message
             throw new VersionFormatException(format("%s doesn't match %s", version, PATTERN));
         }
 

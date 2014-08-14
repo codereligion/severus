@@ -17,6 +17,8 @@ public final class VersionRange {
     public static Range<Version> valueOf(String range) throws VersionFormatException {
         // TODO reuse pattern from VersionBuilder?
         // TODO add support for partial versions, e.g. [1.5,2) -> [1.5.0,2.0.0)
+        // TODO add tests for pre-release
+        // TODO add support for precedence + tests for builds
 
         final Matcher matcher = PATTERN.matcher(range);
         
@@ -36,8 +38,10 @@ public final class VersionRange {
                 return Range.range(lower, lowerType, upper, upperType);
             }
         } else {
+            // TODO verify first
             return Range.singleton(Version.valueOf(range));
         }
+        // TODO throw VersionFormatException
     }
     
     private static Version parse(String version) {

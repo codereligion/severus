@@ -18,24 +18,22 @@ public final class VersionRangeTest {
     
     private final Range<Version> unit;
     
-    private final String expression;
     private final BoundType lowerBoundType;
     private final Version lowerEndpoint;
     private final Version upperEndpoint;
     private final BoundType upperBoundType;
 
-    public VersionRangeTest(String expression, BoundType lowerBoundType, String lowerEndpoint, String upperEndpoint, 
+    public VersionRangeTest(String range, BoundType lowerBoundType, String lowerEndpoint, String upperEndpoint, 
                             BoundType upperBoundType) {
         
-        this.unit = VersionRange.valueOf(expression);
-        this.expression = expression;
+        this.unit = VersionRange.valueOf(range);
         this.lowerBoundType = lowerBoundType;
         this.lowerEndpoint = Version.valueOf(lowerEndpoint);
         this.upperEndpoint = Version.valueOf(upperEndpoint);
         this.upperBoundType = upperBoundType;
     }
 
-    @Parameterized.Parameters(name = "{index}")
+    @Parameterized.Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 {"(1.0.0,2.0.0)", OPEN, "1.0.0", "2.0.0", OPEN},
@@ -90,5 +88,5 @@ public final class VersionRangeTest {
             assertThat(unit.upperEndpoint(), is(upperEndpoint));
         }
     }
-
+    
 }
