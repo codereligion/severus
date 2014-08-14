@@ -1,3 +1,0 @@
-- parse (input: version, output: components (parseable))
-- range check (input: range + version, output: 0 contains, 1 not)
-- validate?
