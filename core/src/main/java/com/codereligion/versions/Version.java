@@ -58,24 +58,28 @@ public abstract class Version implements Comparable<Version> {
         return converter().convert(version);
     }
 
-    public static Version valueOf(final int major) {
+    public static Version valueOf(final long major) {
         return builder().major(major).create();
     }
 
-    public static Version valueOf(final int major, final int minor) {
+    public static Version valueOf(final long major, final long minor) {
         return builder().major(major).minor(minor).create();
     }
 
-    public static Version valueOf(final int major, final int minor, final int patch) {
+    public static Version valueOf(final long major, final long minor, final long patch) {
         return builder().major(major).minor(minor).patch(patch).create();
     }
 
     public static VersionBuilder builder() {
         return new VersionBuilder();
     }
-    
+
     public static Converter<String, Version> converter() {
-        return new VersionConverter();
+        return converter(VersionPrecedence.NATURAL);
+    }
+
+    public static Converter<String, Version> converter(VersionPrecedence precedence) {
+        return new VersionConverter(precedence);
     }
 
 }

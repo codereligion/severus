@@ -12,13 +12,16 @@ final class Options {
     private Format format;
     
     @Arg
-    private Version version;
+    private String version;
     
     @Arg
     private String input;
     
     @Arg
-    private Range<Version> range;
+    private String range;
+    
+    @Arg
+    private VersionPrecedence precedence;
 
     public Command getCommand() {
         return command;
@@ -29,7 +32,7 @@ final class Options {
     }
 
     public Version getVersion() {
-        return version;
+        return Version.builder().parse(version).precendence(precedence).create();
     }
 
     public String getInput() {
@@ -37,7 +40,7 @@ final class Options {
     }
 
     public Range<Version> getRange() {
-        return range;
+        return VersionRange.valueOf(range, precedence);
     }
-    
+
 }

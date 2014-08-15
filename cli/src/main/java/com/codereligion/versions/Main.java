@@ -10,9 +10,10 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+
+import static com.codereligion.versions.VersionPrecedence.NATURAL;
 
 public final class Main {
 
@@ -30,14 +31,16 @@ public final class Main {
 
         final Subparser parse = commands.addParser("parse");
         parse.setDefault("command", new ParseCommand());
-        parse.addArgument("version").type(new VersionType()).required(true);
-        final Argument format = parse.addArgument("-f", "--format").type(new FormatType());
-        format.setDefault(Format.TEXT).choices(new FormatChoice());
+        parse.addArgument("version").required(true);
+        final Argument format = parse.addArgument("-f", "--format").type(FormatType.INSTANCE);
+        format.setDefault(Format.TEXT).choices(FormatType.INSTANCE);
 
         final Subparser contains = commands.addParser("contains");
         contains.setDefault("command", new ContainsCommand());
-        contains.addArgument("range").type(new VersionRangeType()).required(true);
-        contains.addArgument("version").type(new VersionType()).required(true);
+        contains.addArgument("range").required(true);
+        contains.addArgument("version").required(true);
+        final Argument precedence = contains.addArgument("-p", "--precedence").type(PrecedenceType.INSTANCE);
+        precedence.setDefault(NATURAL).choices(PrecedenceType.INSTANCE);
 
         final Subparser validate = commands.addParser("validate");
         validate.setDefault("command", new ValidateCommand());

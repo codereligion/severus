@@ -9,10 +9,16 @@ import javax.annotation.concurrent.Immutable;
 final class VersionConverter extends Converter<String, Version> {
 
     private final Joiner dot = Joiner.on('.');
+    
+    private final VersionPrecedence precedence;
+
+    VersionConverter(VersionPrecedence precedence) {
+        this.precedence = precedence;
+    }
 
     @Override
     protected Version doForward(String version) {
-        return Version.builder().parse(version).create();
+        return Version.builder().parse(version).precendence(precedence).create();
     }
 
     @Override
