@@ -4,11 +4,11 @@ import com.google.common.base.Converter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 import java.util.Objects;
 
-// TODO serializable?
 @Immutable
-public abstract class Version implements Comparable<Version> {
+public abstract class Version implements Comparable<Version>, Serializable {
 
     Version() {
 

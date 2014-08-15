@@ -1,6 +1,7 @@
 package com.codereligion.versions;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ import static com.codereligion.versions.Requirements.checkNotEmpty;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
-public final class VersionNumber implements Identifier<BigInteger> {
+public final class VersionNumber implements Identifier<BigInteger>, Serializable {
     
     private final BigInteger value;
 
