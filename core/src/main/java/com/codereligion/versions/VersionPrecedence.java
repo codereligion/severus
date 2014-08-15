@@ -31,6 +31,11 @@ public abstract class VersionPrecedence extends Equivalence<Version> implements 
             return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(),
                     version.getPreRelease());
         }
+
+        @Override
+        public String toString() {
+            return "NATURAL";
+        }
         
     };
     
@@ -48,6 +53,11 @@ public abstract class VersionPrecedence extends Equivalence<Version> implements 
         protected int doHash(Version version) {
             return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(), 
                     version.getPreRelease(), version.getBuild());
+        }
+
+        @Override
+        public String toString() {
+            return "BUILD";
         }
         
     };

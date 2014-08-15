@@ -1,31 +1,42 @@
 package com.codereligion.versions;
 
 import javax.annotation.concurrent.Immutable;
+import java.math.BigInteger;
 import java.util.Objects;
 
 import static com.codereligion.versions.Requirements.checkNoLeadingZero;
 import static com.codereligion.versions.Requirements.checkNonNegative;
 import static com.codereligion.versions.Requirements.checkNotEmpty;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.lang.Integer.parseInt;
 
 @Immutable
-public final class VersionNumber implements Identifier<Integer> {
+public final class VersionNumber implements Identifier<BigInteger> {
     
-    private final int value;
+    private final BigInteger value;
 
-    private VersionNumber(int value) {
+    private VersionNumber(long value) {
+        this.value = BigInteger.valueOf(value);
+    }
+
+    public VersionNumber(BigInteger value) {
         this.value = value;
     }
 
     @Override
-    public Integer getValue() {
+    public BigInteger getValue() {
         return value;
     }
 
     @Override
     public boolean equals(Object that) {
-        return that instanceof VersionNumber && ((VersionNumber) that).getValue() == value;
+        if (this == that) {
+            return true;
+        } else if (that instanceof VersionNumber) {
+            final VersionNumber other = (VersionNumber) that;
+            return value.compareTo(other.getValue()) == 0;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -38,15 +49,21 @@ public final class VersionNumber implements Identifier<Integer> {
         return String.valueOf(value);
     }
 
-    public static VersionNumber valueOf(int value) {
-        return new VersionNumber(checkNonNegative(value));
+    public static VersionNumber valueOf(long value) {
+        return valueOf(BigInteger.valueOf(value));
     }
     
     public static VersionNumber valueOf(String value) {
         checkNotNull(value, "Value");
         checkNotEmpty(value);
         checkNoLeadingZero(value);
-        return valueOf(parseInt(value));
+        return valueOf(new BigInteger(value));
     }
+
+    private static VersionNumber valueOf(BigInteger value) {
+        checkNonNegative(value);
+        return new VersionNumber(value);
+    }
+
 
 }

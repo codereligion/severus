@@ -22,7 +22,14 @@ public final class Name implements Identifier<String> {
 
     @Override
     public boolean equals(Object that) {
-        return that instanceof Name && Objects.equals(that.toString(), value);
+        if (this == that) {
+            return true;
+        } else if (that instanceof Name) {
+            final Name other = (Name) that;
+            return value.equals(other.getValue());
+        } else {
+            return false;
+        }
     }
 
     @Override

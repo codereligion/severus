@@ -3,7 +3,6 @@ package com.codereligion.versions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.lang.String.format;
@@ -44,7 +43,7 @@ public final class VersionBuilder {
         return this;
     }
 
-    public VersionBuilder major(int major) {
+    public VersionBuilder major(long major) {
         return major(VersionNumber.valueOf(major));
     }
     
@@ -57,7 +56,7 @@ public final class VersionBuilder {
         return this;
     }
     
-    public VersionBuilder minor(int minor) {
+    public VersionBuilder minor(long minor) {
         return minor(VersionNumber.valueOf(minor));
     }
     
@@ -70,7 +69,7 @@ public final class VersionBuilder {
         return this;
     }
     
-    public VersionBuilder patch(int patch) {
+    public VersionBuilder patch(long patch) {
         return patch(VersionNumber.valueOf(patch));
     }
     
