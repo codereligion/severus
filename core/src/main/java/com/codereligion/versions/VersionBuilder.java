@@ -9,9 +9,6 @@ import static java.lang.String.format;
 import static java.util.regex.Pattern.compile;
 
 public final class VersionBuilder {
-
-    private static final Pattern PATTERN = compile(
-            "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-([.0-9A-Za-z-]+))?(?:\\+([.0-9A-Za-z-]+))?");
     
     private VersionNumber major = VersionNumber.valueOf(0);
     private VersionNumber minor = VersionNumber.valueOf(0);
@@ -27,12 +24,7 @@ public final class VersionBuilder {
     public VersionBuilder parse(String version) throws VersionFormatException {
         checkNotNull(version, "Version");
         
-        final Matcher matcher = PATTERN.matcher(version);
-        
-        if (!matcher.matches()) {
-            // TODO improve message
-            throw new VersionFormatException(format("%s doesn't match %s", version, PATTERN));
-        }
+        final Matcher matcher = Requirements.match(version);
 
         major(matcher.group(1));
         minor(matcher.group(2));
