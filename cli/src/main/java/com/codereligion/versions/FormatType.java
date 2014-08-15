@@ -7,7 +7,6 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.ArgumentType;
 
-import javax.annotation.concurrent.Immutable;
 import java.util.Locale;
 
 enum FormatType implements ArgumentType<Format>, ArgumentChoice {

@@ -4,18 +4,19 @@ import com.google.common.base.Equivalence;
 import com.google.common.collect.ComparisonChain;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Objects;
 
 @Immutable
-public abstract class VersionPrecedence extends Equivalence<Version> implements Comparator<Version> {
-    
+public abstract class VersionPrecedence extends Equivalence<Version> implements Comparator<Version>, Serializable {
+
     private VersionPrecedence() {
         // not to be used outside
     }
 
     public static final VersionPrecedence NATURAL = new VersionPrecedence() {
-        
+
         @Override
         public int compare(Version left, Version right) {
             return ComparisonChain.start().
@@ -32,15 +33,19 @@ public abstract class VersionPrecedence extends Equivalence<Version> implements 
                     version.getPreRelease());
         }
 
+        private Object readResolve() throws java.io.ObjectStreamException {
+            return NATURAL;
+        }
+
         @Override
         public String toString() {
             return "NATURAL";
         }
-        
+
     };
-    
+
     public static final VersionPrecedence BUILD = new VersionPrecedence() {
-        
+
         @Override
         public int compare(Version left, Version right) {
             return ComparisonChain.start().
@@ -51,17 +56,21 @@ public abstract class VersionPrecedence extends Equivalence<Version> implements 
 
         @Override
         protected int doHash(Version version) {
-            return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(), 
+            return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(),
                     version.getPreRelease(), version.getBuild());
+        }
+
+        private Object readResolve() throws java.io.ObjectStreamException {
+            return BUILD;
         }
 
         @Override
         public String toString() {
             return "BUILD";
         }
-        
+
     };
-    
+
     @Override
     protected boolean doEquivalent(Version left, Version right) {
         return compare(left, right) == 0;

@@ -1,13 +1,14 @@
 package com.codereligion.versions;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 import java.util.Objects;
 
 import static com.codereligion.versions.Requirements.checkNotEmpty;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
-public final class Name implements Identifier<String> {
+public final class Name implements Identifier<String>, Serializable {
 
     private final String value;
 

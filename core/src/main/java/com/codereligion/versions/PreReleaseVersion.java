@@ -7,6 +7,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.elementsEqual;
 
 @Immutable
-public final class PreReleaseVersion implements Tuple<Identifier<?>> {
+public final class PreReleaseVersion implements Tuple<Identifier<?>>, Serializable {
     
     private static final PreReleaseVersion EMPTY = new PreReleaseVersion();
     
