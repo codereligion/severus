@@ -51,11 +51,15 @@ public abstract class Version implements Comparable<Version>, Serializable {
 
     @Override
     public String toString() {
-        return converter().reverse().convert(this);
+        return converter(getPrecedence()).reverse().convert(this);
     }
 
     public static Version valueOf(String version) throws VersionFormatException {
-        return converter().convert(version);
+        return valueOf(version, VersionPrecedence.NATURAL);
+    }
+
+    public static Version valueOf(String version, VersionPrecedence precedence) throws VersionFormatException {
+        return converter(precedence).convert(version);
     }
 
     public static Version valueOf(final long major) {

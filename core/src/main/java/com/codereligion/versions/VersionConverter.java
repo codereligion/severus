@@ -18,7 +18,7 @@ final class VersionConverter extends Converter<String, Version> {
 
     @Override
     protected Version doForward(String version) {
-        return Version.builder().parse(version).precendence(precedence).create();
+        return Version.builder().parse(version).precedence(precedence).create();
     }
 
     @Override

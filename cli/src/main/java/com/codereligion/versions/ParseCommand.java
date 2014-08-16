@@ -17,7 +17,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import static com.google.common.collect.FluentIterable.from;
 final class ParseCommand implements Command {
 
     @Override
-    public int execute(Options options) throws IOException {
+    public int execute(Options options) {
         final Format format = options.getFormat();
         final Version version = options.getVersion();
 
@@ -70,7 +69,7 @@ final class ParseCommand implements Command {
         return '"' + s.toString() + '"';
     }
 
-    private void json(Version version) throws IOException {
+    private void json(Version version) {
         final Map<String, Object> map = Maps.newLinkedHashMap();
 
         map.put("major", version.getMajor().getValue());
@@ -79,8 +78,7 @@ final class ParseCommand implements Command {
         map.put("pre-release", listify(version.getPreRelease()));
         map.put("build", listify(version.getBuild()));
 
-        final Gson gson = new Gson();
-        gson.toJson(map, System.out);
+        new Gson().toJson(map, System.out);
     }
 
     private List<Object> listify(Iterable<? extends Identifier<?>> identifiers) {
@@ -88,7 +86,7 @@ final class ParseCommand implements Command {
     }
 
     private Function<Identifier<?>, Object> toValue() {
-        return new Function<Identifier<?>, Object>() {
+        return new NullHostileFunction<Identifier<?>, Object>() {
             @Override
             public Object apply(Identifier<?> input) {
                 return input.getValue();
@@ -135,7 +133,6 @@ final class ParseCommand implements Command {
         } catch (TransformerException e) {
             throw new IllegalStateException(e);
         }
-
     }
 
     private Node node(Document document, String tag, Identifier<?> identifier) {

@@ -7,6 +7,8 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.ArgumentType;
 
+import javax.annotation.Nullable;
+
 enum PrecedenceType implements ArgumentType<VersionPrecedence>, ArgumentChoice {
     
     INSTANCE;
@@ -24,7 +26,7 @@ enum PrecedenceType implements ArgumentType<VersionPrecedence>, ArgumentChoice {
     }
     
     @Override
-    public boolean contains(Object precedence) {
+    public boolean contains(@Nullable Object precedence) {
         return precedence != null;
     }
 

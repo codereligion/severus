@@ -32,7 +32,7 @@ final class Options {
     }
 
     public Version getVersion() {
-        return Version.builder().parse(version).precendence(precedence).create();
+        return Version.valueOf(version, precedence);
     }
 
     public String getInput() {

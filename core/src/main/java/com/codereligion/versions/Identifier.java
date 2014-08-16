@@ -1,9 +1,10 @@
 package com.codereligion.versions;
 
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
 
 @Immutable
-public interface Identifier<T> {
+public interface Identifier<T> extends Serializable {
     
     Comparable<T> getValue();
     

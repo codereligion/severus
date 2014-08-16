@@ -17,7 +17,7 @@ enum Format {
     }
 
     private static Function<Format, String> toLowerCase() {
-        return new Function<Format, String>() {
+        return new NullHostileFunction<Format, String>() {
             @Override
             public String apply(Format input) {
                 return input.name().toLowerCase(Locale.ENGLISH);

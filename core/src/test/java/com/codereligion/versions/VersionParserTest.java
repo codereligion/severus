@@ -8,6 +8,7 @@ import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.annotation.Nullable;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
@@ -47,16 +48,18 @@ public final class VersionParserTest {
         public final Iterable<String> preRelease;
         public final Iterable<String> build;
 
-        private Output(int major, int minor, int patch, List<String> preRelease, List<String> build) {
+        private Output(int major, int minor, int patch, @Nullable List<String> preRelease, 
+                       @Nullable Iterable<String> build) {
             this(BigInteger.valueOf(major), BigInteger.valueOf(minor), BigInteger.valueOf(patch), preRelease, build);
         }
 
-        private Output(String major, String minor, String patch, List<String> preRelease, List<String> build) {
+        private Output(String major, String minor, String patch, @Nullable Iterable<String> preRelease, 
+                       @Nullable Iterable<String> build) {
             this(new BigInteger(major), new BigInteger(minor), new BigInteger(patch), preRelease, build);
         }
 
-        private Output(BigInteger major, BigInteger minor, BigInteger patch, Iterable<String> preRelease, 
-                       Iterable<String> build) {
+        private Output(BigInteger major, BigInteger minor, BigInteger patch, @Nullable Iterable<String> preRelease, 
+                       @Nullable Iterable<String> build) {
             this.major = major;
             this.minor = minor;
             this.patch = patch;
@@ -71,7 +74,7 @@ public final class VersionParserTest {
                     patch(patch.toString()).
                     preRelease(Joiner.on('.').join(preRelease)).
                     build(Joiner.on('.').join(build)).
-                    precendence(precedence).
+                    precedence(precedence).
                     create();
         }
     }
@@ -115,7 +118,7 @@ public final class VersionParserTest {
                     new Example(
                             new Input("1.0.0-rc1-0.5+git.5e84d09"),
                             new Output(1, 0, 0, asList("rc1-0", "5"), asList("git", "5e84d09"))),
-                    new Example(
+                    new Example( // integer overflow
                             new Input("999999999999.999999999999.999999999999-999999999999"),
                             new Output("999999999999", "999999999999", "999999999999", asList("999999999999"), null)
                     ));
@@ -128,90 +131,90 @@ public final class VersionParserTest {
 
     @Test
     public void major(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
-        assertThat(unit.getMajor(), is(VersionNumber.valueOf(example.output.major.toString())));
+        final Version unit = Version.valueOf(example.input.version, precedence);
+        assertThat(unit.getMajor(), is(VersionNumber.valueOf(example.output.major)));
     }
 
     @Test
     public void majorValue(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.getMajor().getValue(), comparesEqualTo(example.output.major));
     }
 
     @Test
     public void minor(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
-        assertThat(unit.getMinor(), is(VersionNumber.valueOf(example.output.minor.toString())));
+        final Version unit = Version.valueOf(example.input.version, precedence);
+        assertThat(unit.getMinor(), is(VersionNumber.valueOf(example.output.minor)));
     }
 
     @Test
     public void minorValue(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.getMinor().getValue(), comparesEqualTo(example.output.minor));
     }
 
     @Test
     public void patch(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
-        assertThat(unit.getPatch(), is(VersionNumber.valueOf(example.output.patch.toString())));
+        final Version unit = Version.valueOf(example.input.version, precedence);
+        assertThat(unit.getPatch(), is(VersionNumber.valueOf(example.output.patch)));
     }
 
     @Test
     public void patchValue(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.getPatch().getValue(), comparesEqualTo(example.output.patch));
     }
 
     @Test
     public void preRelease(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.getPreRelease(), is(PreReleaseVersion.valueOf(example.output.preRelease)));
     }
 
     @Test
     public void preReleaseValue(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(from(unit.getPreRelease()).transform(toValue()).toList(), is(example.output.preRelease));
     }
 
     @Test
     public void build(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.getBuild(), is(BuildMetadata.valueOf(example.output.build)));
     }
 
     @Test
     public void buildValue(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(from(unit.getBuild()).transform(toValue()).toList(), is(example.output.build));
     }
 
     @Test
     public void equalVersionShouldBeEqual(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit, is(example.output.getExpected(precedence)));
     }
 
     @Test
     public void equalVersionShouldHaveSameHashCode(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.hashCode(), is(example.output.getExpected(precedence).hashCode()));
     }
 
     @Test
     public void equalVersionShouldCompareEqual(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit, comparesEqualTo(example.output.getExpected(precedence)));
     }
 
     @Test
     public void stringValueShouldMatchOriginalInput(@All Example example, @All VersionPrecedence precedence) {
-        final Version unit = Version.builder().parse(example.input.version).precendence(precedence).create();
+        final Version unit = Version.valueOf(example.input.version, precedence);
         assertThat(unit.toString(), is(example.input.version));
     }
 
     private Function<Identifier<?>, String> toValue() {
-        return new Function<Identifier<?>, String>() {
+        return new NullHostileFunction<Identifier<?>, String>() {
             @Override
             public String apply(Identifier<?> input) {
                 return input.getValue().toString();

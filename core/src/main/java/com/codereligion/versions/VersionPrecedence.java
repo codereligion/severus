@@ -33,7 +33,8 @@ public abstract class VersionPrecedence extends Equivalence<Version> implements 
                     version.getPreRelease());
         }
 
-        private Object readResolve() throws java.io.ObjectStreamException {
+        @SuppressWarnings({"SameReturnValue", "unused"})
+        private Object readResolve() {
             return NATURAL;
         }
 
@@ -59,8 +60,9 @@ public abstract class VersionPrecedence extends Equivalence<Version> implements 
             return Objects.hash(version.getMajor(), version.getMinor(), version.getPatch(),
                     version.getPreRelease(), version.getBuild());
         }
-
-        private Object readResolve() throws java.io.ObjectStreamException {
+        
+        @SuppressWarnings({"SameReturnValue", "unused"})
+        private Object readResolve() {
             return BUILD;
         }
 

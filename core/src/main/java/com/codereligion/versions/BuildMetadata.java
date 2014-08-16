@@ -7,7 +7,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -16,7 +15,7 @@ import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.elementsEqual;
 
 @Immutable
-public final class BuildMetadata implements Tuple<Name>, Serializable {
+public final class BuildMetadata implements Tuple<Name> {
 
     private static final BuildMetadata EMPTY = new BuildMetadata();
     
@@ -82,7 +81,7 @@ public final class BuildMetadata implements Tuple<Name>, Serializable {
     }
 
     private static Function<String, Name> toName() {
-        return new Function<String, Name>() {
+        return new NullHostileFunction<String, Name>() {
             @Override
             public Name apply(final String value) {
                 return Name.valueOf(value);

@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Comparator;
-
 import static com.codereligion.versions.VersionPrecedence.NATURAL;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -42,13 +40,13 @@ public final class NaturalVersionPrecedenceTest {
         return Randomizer.randomize(NATURALS, 100);
     }
     
-    private ImmutableList<Version> sort(Comparator<Version> precedence) {
-        return Ordering.from(precedence).immutableSortedCopy(input);
+    private ImmutableList<Version> sort() {
+        return Ordering.from(NATURAL).immutableSortedCopy(input);
     }
 
     @Test
     public void natural() {
-        assertThat(sort(NATURAL), is(NATURALS));
+        assertThat(sort(), is(NATURALS));
     }
     
 }

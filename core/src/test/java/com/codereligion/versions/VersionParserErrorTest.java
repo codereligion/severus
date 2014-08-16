@@ -1,25 +1,11 @@
 package com.codereligion.versions;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import org.jukito.All;
-import org.jukito.JukitoModule;
-import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static com.google.common.base.Objects.firstNonNull;
-import static com.google.common.collect.FluentIterable.from;
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.comparesEqualTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public final class VersionParserErrorTest {
@@ -71,13 +57,28 @@ public final class VersionParserErrorTest {
     }
     
     @Test(expected = VersionFormatException.class)
+    public void valueOfNaturalPrecedence() {
+        Version.valueOf(version, VersionPrecedence.NATURAL);
+    }
+    
+    @Test(expected = VersionFormatException.class)
+    public void valueOfBuildPrecedence() {
+        Version.valueOf(version, VersionPrecedence.BUILD);
+    }
+    
+    @Test(expected = VersionFormatException.class)
     public void parse() {
         Version.builder().parse(version);
     }
     
     @Test(expected = VersionFormatException.class)
-    public void parsePrecedence() {
-        Version.builder().precendence(VersionPrecedence.BUILD).parse(version);
+    public void parseNaturalPrecedence() {
+        Version.builder().precedence(VersionPrecedence.NATURAL).parse(version);
+    }
+    
+    @Test(expected = VersionFormatException.class)
+    public void parseBuildPrecedence() {
+        Version.builder().precedence(VersionPrecedence.BUILD).parse(version);
     }
     
 }

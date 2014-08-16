@@ -33,7 +33,7 @@ public final class VersionSerializationTest {
     public static List<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 {Version.valueOf("1.2.3-RC1.beta.17+5e84d09")},
-                {Version.builder().parse("1.2.3-RC1.beta.18+5e84d09").precendence(BUILD).create()}
+                {Version.valueOf("1.2.3-RC1.beta.18+5e84d09", BUILD)}
         });
     }
     

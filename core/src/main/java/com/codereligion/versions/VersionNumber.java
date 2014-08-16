@@ -1,7 +1,6 @@
 package com.codereligion.versions;
 
 import javax.annotation.concurrent.Immutable;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -11,15 +10,11 @@ import static com.codereligion.versions.Requirements.checkNotEmpty;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Immutable
-public final class VersionNumber implements Identifier<BigInteger>, Serializable {
+public final class VersionNumber implements Identifier<BigInteger> {
     
     private final BigInteger value;
 
-    private VersionNumber(long value) {
-        this.value = BigInteger.valueOf(value);
-    }
-
-    public VersionNumber(BigInteger value) {
+    private VersionNumber(BigInteger value) {
         this.value = value;
     }
 
@@ -61,7 +56,7 @@ public final class VersionNumber implements Identifier<BigInteger>, Serializable
         return valueOf(new BigInteger(value));
     }
 
-    private static VersionNumber valueOf(BigInteger value) {
+    public static VersionNumber valueOf(BigInteger value) {
         checkNonNegative(value);
         return new VersionNumber(value);
     }

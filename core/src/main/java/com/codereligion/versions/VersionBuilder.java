@@ -1,12 +1,9 @@
 package com.codereligion.versions;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.nullToEmpty;
-import static java.lang.String.format;
-import static java.util.regex.Pattern.compile;
 
 public final class VersionBuilder {
     
@@ -92,7 +89,7 @@ public final class VersionBuilder {
         return this;
     }
     
-    public VersionBuilder precendence(VersionPrecedence precedence) {
+    public VersionBuilder precedence(VersionPrecedence precedence) {
         this.precedence = precedence;
         return this;
     }

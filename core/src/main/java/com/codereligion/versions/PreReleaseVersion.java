@@ -7,7 +7,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -16,7 +15,7 @@ import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.elementsEqual;
 
 @Immutable
-public final class PreReleaseVersion implements Tuple<Identifier<?>>, Serializable {
+public final class PreReleaseVersion implements Tuple<Identifier<?>> {
     
     private static final PreReleaseVersion EMPTY = new PreReleaseVersion();
     
@@ -82,7 +81,7 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>>, Serializab
     }
 
     private static Function<String, Identifier<?>> toIdentifier() {
-        return new Function<String, Identifier<?>>() {
+        return new NullHostileFunction<String, Identifier<?>>() {
             @Override
             public Identifier apply(final String value) {
                 return Identifiers.valueOf(value);

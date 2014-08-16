@@ -7,6 +7,7 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.ArgumentType;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 enum FormatType implements ArgumentType<Format>, ArgumentChoice {
@@ -23,7 +24,7 @@ enum FormatType implements ArgumentType<Format>, ArgumentChoice {
     }
 
     @Override
-    public boolean contains(Object format) {
+    public boolean contains(@Nullable Object format) {
         return format != null;
     }
 
