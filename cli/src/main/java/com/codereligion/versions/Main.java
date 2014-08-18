@@ -34,7 +34,7 @@ public final class Main {
         parse.addArgument("version").required(true);
         final Argument format = parse.addArgument("-f", "--format").type(FormatType.INSTANCE);
         format.setDefault(Format.TEXT).choices(FormatType.INSTANCE);
-        parse.addArgument("--pretty").action(Arguments.storeTrue());
+        parse.addArgument("-p", "--pretty").action(Arguments.storeTrue());
 
         final Subparser contains = commands.addParser("contains");
         contains.setDefault("command", new ContainsCommand());
