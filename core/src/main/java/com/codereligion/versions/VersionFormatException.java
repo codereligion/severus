@@ -2,8 +2,12 @@ package com.codereligion.versions;
 
 public final class VersionFormatException extends RuntimeException {
 
-    public VersionFormatException(String message) {
+    VersionFormatException(String message) {
         super(message);
+    }
+
+    VersionFormatException(Exception e) {
+        super(e);
     }
     
 }

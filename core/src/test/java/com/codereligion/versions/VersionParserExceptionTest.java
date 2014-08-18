@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public final class VersionParserErrorTest {
+public final class VersionParserExceptionTest {
 
     private final String version;
 
-    public VersionParserErrorTest(String version) {
+    public VersionParserExceptionTest(String version) {
         this.version = version;
     }
     

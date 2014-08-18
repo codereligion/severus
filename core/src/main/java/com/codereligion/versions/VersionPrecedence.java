@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Objects;
 
+// TODO enum!
 @Immutable
 public abstract class VersionPrecedence extends Equivalence<Version> implements Comparator<Version>, Serializable {
 

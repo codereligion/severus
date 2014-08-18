@@ -80,6 +80,7 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>> {
         return new PreReleaseVersion(identifiers.toList());
     }
 
+    // TODO converter?
     private static Function<String, Identifier<?>> toIdentifier() {
         return new NullHostileFunction<String, Identifier<?>>() {
             @Override

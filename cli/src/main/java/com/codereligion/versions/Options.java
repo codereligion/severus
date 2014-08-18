@@ -39,7 +39,7 @@ final class Options {
         return input;
     }
 
-    public Range<Version> getRange() {
+    public VersionRange getRange() {
         return VersionRange.valueOf(range, precedence);
     }
 

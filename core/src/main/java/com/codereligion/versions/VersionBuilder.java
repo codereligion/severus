@@ -1,11 +1,10 @@
 package com.codereligion.versions;
 
-import java.util.regex.Matcher;
-
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Strings.nullToEmpty;
 
 public final class VersionBuilder {
+    
+    private final Parser<Version> parser = new PatternVersionParser();
     
     private VersionNumber major = VersionNumber.valueOf(0);
     private VersionNumber minor = VersionNumber.valueOf(0);
@@ -18,16 +17,19 @@ public final class VersionBuilder {
         // should only be accessible from static factory method
     }
 
+    // TODO still needed? what about a static of(Version) method?
+    @Deprecated
     public VersionBuilder parse(String version) throws VersionFormatException {
         checkNotNull(version, "Version");
-        
-        final Matcher matcher = Requirements.match(version);
 
-        major(matcher.group(1));
-        minor(matcher.group(2));
-        patch(matcher.group(3));
-        preRelease(nullToEmpty(matcher.group(4)));
-        build(nullToEmpty(matcher.group(5)));
+        final Version v = parser.parse(version, precedence);
+        
+        major(v.getMajor());
+        minor(v.getMinor());
+        patch(v.getPatch());
+        preRelease(v.getPreRelease());
+        build(v.getBuild());
+        precedence(v.getPrecedence());
         
         return this;
     }
