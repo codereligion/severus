@@ -4,11 +4,11 @@
 
     <parent>
         <groupId>com.codereligion</groupId>
-        <artifactId>versions-parent</artifactId>
+        <artifactId>severus-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>versions-cli</artifactId>
+    <artifactId>severus-cli</artifactId>
     <packaging>jar</packaging>
 
     <name>Semantic Version Ranges: CLI</name>
@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>com.codereligion</groupId>
-            <artifactId>versions-core</artifactId>
+            <artifactId>severus-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -57,8 +57,9 @@
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.codereligion.versions.Main</mainClass>
+                            <mainClass>com.codereligion.severus.Main</mainClass>
                             <manifestEntries>
+                                <Name>${project.artifactId}</Name>
                                 <Version>${project.version}</Version>
                             </manifestEntries>
                         </transformer>

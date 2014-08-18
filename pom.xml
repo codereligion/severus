@@ -9,13 +9,13 @@
     </parent>
 
     <groupId>com.codereligion</groupId>
-    <artifactId>versions-parent</artifactId>
+    <artifactId>severus-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Semantic Version Ranges</name>
     <description>A library which parses and evaluates semantic versions and version ranges.</description>
-    <url>https://github.com/codereligion/versions</url>
+    <url>https://github.com/codereligion/severus</url>
 
     <prerequisites>
         <maven>3.0.5</maven>
@@ -34,9 +34,9 @@
     </licenses>
 
     <scm>
-        <url>scm:git:git@github.com:codereligion/versions.git</url>
-        <connection>scm:git:git@github.com:codereligion/versions.git</connection>
-        <developerConnection>scm:git:git@github.com:codereligion/versions.git</developerConnection>
+        <url>scm:git:git@github.com:codereligion/severus.git</url>
+        <connection>scm:git:git@github.com:codereligion/severus.git</connection>
+        <developerConnection>scm:git:git@github.com:codereligion/severus.git</developerConnection>
     </scm>
 
     <developers>
