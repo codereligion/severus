@@ -3,6 +3,7 @@ package com.codereligion.versions;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,6 +29,7 @@ final class ParseCommand implements Command {
     public int execute(Options options) {
         final Format format = options.getFormat();
         final Version version = options.getVersion();
+        final boolean pretty = options.isPretty();
 
         switch (format) {
             case TEXT:
@@ -37,10 +39,10 @@ final class ParseCommand implements Command {
                 script(version);
                 break;
             case JSON:
-                json(version);
+                json(version, pretty);
                 break;
             case XML:
-                xml(version);
+                xml(version, pretty);
                 break;
             default:
                 throw new UnsupportedOperationException(format.toString());
@@ -69,7 +71,7 @@ final class ParseCommand implements Command {
         return '"' + s.toString() + '"';
     }
 
-    private void json(Version version) {
+    private void json(Version version, boolean pretty) {
         final Map<String, Object> map = Maps.newLinkedHashMap();
 
         map.put("major", version.getMajor().getValue());
@@ -78,7 +80,14 @@ final class ParseCommand implements Command {
         map.put("pre-release", listify(version.getPreRelease()));
         map.put("build", listify(version.getBuild()));
 
-        new Gson().toJson(map, System.out);
+        final GsonBuilder builder = new GsonBuilder();
+
+        if (pretty) {
+            builder.setPrettyPrinting();
+        }
+
+        final Gson gson = builder.create();
+        gson.toJson(map, System.out);
     }
 
     private List<Object> listify(Iterable<? extends Identifier<?>> identifiers) {
@@ -94,7 +103,7 @@ final class ParseCommand implements Command {
         };
     }
 
-    private void xml(Version version) {
+    private void xml(Version version, boolean pretty) {
         final DocumentBuilder builder;
 
         try {
@@ -125,8 +134,11 @@ final class ParseCommand implements Command {
         }
 
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        
+        if (pretty) {
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        }
         
         try {
             transformer.transform(new DOMSource(document), new StreamResult(System.out));

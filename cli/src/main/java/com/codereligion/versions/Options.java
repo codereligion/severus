@@ -7,16 +7,19 @@ final class Options {
     
     @Arg
     private Command command;
-    
+
     @Arg
     private Format format;
-    
+
+    @Arg
+    private boolean pretty;
+
     @Arg
     private String version;
-    
+
     @Arg
     private String input;
-    
+
     @Arg
     private String range;
     
@@ -31,6 +34,10 @@ final class Options {
         return format;
     }
 
+    public boolean isPretty() {
+        return pretty;
+    }
+
     public Version getVersion() {
         return Version.valueOf(version, precedence);
     }
@@ -42,5 +49,5 @@ final class Options {
     public VersionRange getRange() {
         return VersionRange.valueOf(range, precedence);
     }
-
+    
 }
