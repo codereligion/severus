@@ -1,4 +1,4 @@
 #!/bin/sh
 
 directory=$(dirname $(dirname $0))
-java -jar ${directory}/target/severus-cli-*-deps.jar $*
+java -jar ${directory}/target/severus-cli-*.jar $*
