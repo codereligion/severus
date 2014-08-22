@@ -19,7 +19,7 @@ import static com.google.common.collect.Iterables.transform;
 final class VersionRangeConverter extends Converter<String, VersionRange> {
     
     // TODO make configurable
-    private final Parser<VersionRange> parser = new PatternVersionRangeParser();
+    private final Reader<VersionRange> reader = new PatternVersionRangeReader();
     private final VersionPrecedence precedence;
 
     VersionRangeConverter(VersionPrecedence precedence) {
@@ -28,7 +28,7 @@ final class VersionRangeConverter extends Converter<String, VersionRange> {
 
     @Override
     protected VersionRange doForward(String range) {
-        return parser.parse(range, precedence);
+        return reader.read(range, precedence);
     }
 
     @Override

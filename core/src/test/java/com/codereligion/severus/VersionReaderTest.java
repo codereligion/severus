@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JukitoRunner.class)
-public final class VersionParserTest {
+public final class VersionReaderTest {
 
     private static final class Example {
         public final Input input;

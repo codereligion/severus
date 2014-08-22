@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public final class VersionParserExceptionTest {
+public final class VersionReaderExceptionTest {
 
     private final String version;
 
-    public VersionParserExceptionTest(String version) {
+    public VersionReaderExceptionTest(String version) {
         this.version = version;
     }
     
@@ -64,21 +64,6 @@ public final class VersionParserExceptionTest {
     @Test(expected = VersionFormatException.class)
     public void valueOfBuildPrecedence() {
         Version.valueOf(version, VersionPrecedence.BUILD);
-    }
-    
-    @Test(expected = VersionFormatException.class)
-    public void parse() {
-        Version.builder().parse(version);
-    }
-    
-    @Test(expected = VersionFormatException.class)
-    public void parseNaturalPrecedence() {
-        Version.builder().precedence(VersionPrecedence.NATURAL).parse(version);
-    }
-    
-    @Test(expected = VersionFormatException.class)
-    public void parseBuildPrecedence() {
-        Version.builder().precedence(VersionPrecedence.BUILD).parse(version);
     }
     
 }

@@ -7,11 +7,10 @@ import java.util.regex.Pattern;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Strings.nullToEmpty;
-import static java.lang.String.format;
 import static java.util.regex.Pattern.compile;
 
 @Immutable
-final class PatternVersionParser implements Parser<Version> {
+final class PatternVersionReader implements Reader<Version> {
 
     private static final Pattern VERSION_NUMBER = compile("0|[1-9][0-9]*");
     private static final Pattern PATCH = compile("(" + VERSION_NUMBER + ")");
@@ -28,12 +27,12 @@ final class PatternVersionParser implements Parser<Version> {
     static final Pattern SHORT = compile(MAJOR + "(?:\\." + MINOR + ")?" + "(?:\\." + PATCH + ")?" + PRE_RELEASE + BUILD);
     
     @Override
-    public Version parse(String version, VersionPrecedence precedence) {
-        return parse(version, precedence, ParseMode.NORMAL);
+    public Version read(String version, VersionPrecedence precedence) {
+        return read(version, precedence, ReadMode.NORMAL);
     }
 
     @Override
-    public Version parse(String version, VersionPrecedence precedence, ParseMode mode) {
+    public Version read(String version, VersionPrecedence precedence, ReadMode mode) {
         switch (mode) {
             case NORMAL:
                 return parse(version, precedence, VERSION, null);
@@ -48,17 +47,20 @@ final class PatternVersionParser implements Parser<Version> {
         final Matcher matcher = pattern.matcher(version);
 
         if (!matcher.matches()) {
-            throw new VersionFormatException(version + " is not a valid version");
+            throw new VersionFormatException(version + " is not a valid version\n" + 
+            "Should match: " + pattern);
         }
 
-        return new ConcreteVersion(
-                VersionNumber.valueOf(firstNonNull(matcher.group(1), defaultValue)),
-                VersionNumber.valueOf(firstNonNull(matcher.group(2), defaultValue)),
-                VersionNumber.valueOf(firstNonNull(matcher.group(3), defaultValue)),
-                PreReleaseVersion.valueOf(nullToEmpty(matcher.group(4))),
-                BuildMetadata.valueOf(nullToEmpty(matcher.group(5))),
-                precedence
-        );
+        final VersionBuilder builder = Version.builder();
+        
+        builder.major(firstNonNull(matcher.group(1), defaultValue));
+        builder.minor(firstNonNull(matcher.group(2), defaultValue));
+        builder.patch(firstNonNull(matcher.group(3), defaultValue));
+        builder.preRelease(nullToEmpty(matcher.group(4)));
+        builder.build(nullToEmpty(matcher.group(5)));
+        builder.precedence(precedence);
+        
+        return builder.create();
     }
 
 }

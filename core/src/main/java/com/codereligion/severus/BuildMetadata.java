@@ -64,6 +64,7 @@ public final class BuildMetadata implements Tuple<Name> {
         return EMPTY;
     }
 
+    // TODO should be in PatternVersionReader
     public static BuildMetadata valueOf(final String build) {
         checkNotNull(build, "BuildMetadata");
         

@@ -5,6 +5,9 @@ import net.sourceforge.argparse4j.annotation.Arg;
 final class Options {
     
     @Arg
+    private boolean verbose;
+    
+    @Arg
     private Command command;
 
     @Arg
@@ -24,6 +27,10 @@ final class Options {
     
     @Arg
     private VersionPrecedence precedence;
+
+    public boolean isVerbose() {
+        return verbose;
+    }
 
     public Command getCommand() {
         return command;

@@ -9,13 +9,13 @@ import javax.annotation.concurrent.Immutable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.codereligion.severus.PatternVersionParser.SHORT;
+import static com.codereligion.severus.PatternVersionReader.SHORT;
 import static java.util.regex.Pattern.compile;
 
 @Immutable
-final class PatternVersionRangeParser implements Parser<VersionRange> {
+final class PatternVersionRangeReader implements Reader<VersionRange> {
     
-    private final Parser<Version> parser = new PatternVersionParser();
+    private final Reader<Version> reader = new PatternVersionReader();
     
     private static final Pattern SINGLE = compile("\\[(.+)\\]");
     private static final Pattern DOUBLE = compile("([\\[\\(])(.*?),(.*?)([\\)\\]])");
@@ -23,12 +23,12 @@ final class PatternVersionRangeParser implements Parser<VersionRange> {
     private static final Pattern RANGE_SET = compile(ANY_RANGE + "(?:," + ANY_RANGE + ")*");
 
     @Override
-    public VersionRange parse(String range, VersionPrecedence precedence) {
-        return parse(range, precedence, ParseMode.NORMAL);
+    public VersionRange read(String range, VersionPrecedence precedence) {
+        return read(range, precedence, ReadMode.NORMAL);
     }
 
     @Override
-    public VersionRange parse(String range, VersionPrecedence precedence, ParseMode mode) {
+    public VersionRange read(String range, VersionPrecedence precedence, ReadMode mode) {
         if (range.isEmpty()) {
             return VersionRange.empty(); 
         } else if (RANGE_SET.matcher(range).matches()) {
@@ -78,11 +78,11 @@ final class PatternVersionRangeParser implements Parser<VersionRange> {
         final Matcher matcher = SINGLE.matcher(range);
 
         if (matcher.matches()) {
-            return Range.singleton(parser.parse(matcher.group(1), precedence, ParseMode.SHORT));
+            return Range.singleton(reader.read(matcher.group(1), precedence, ReadMode.SHORT));
         }
 
         // TODO verify first
-        return Range.singleton(parser.parse(range, precedence, ParseMode.SHORT));
+        return Range.singleton(reader.read(range, precedence, ReadMode.SHORT));
     }
 
     private Range<Version> build(BoundType lowerType, Optional<Version> lower, Optional<Version> upper, BoundType upperType) {
@@ -113,7 +113,7 @@ final class PatternVersionRangeParser implements Parser<VersionRange> {
         if (version.isEmpty()) {
             return Optional.absent();
         } else {
-            return Optional.of(parser.parse(version, precedence, ParseMode.SHORT));
+            return Optional.of(reader.read(version, precedence, ReadMode.SHORT));
         }
     }
 
