@@ -32,8 +32,9 @@ public abstract class Version implements Comparable<Version>, Serializable {
             return true;
         } else if (that instanceof Version) {
             final Version other = (Version) that;
-            return Objects.equals(getPrecedence(), other.getPrecedence()) &&
-                    getPrecedence().equivalent(this, other);
+            final VersionPrecedence precedence = getPrecedence();
+            return Objects.equals(precedence, other.getPrecedence()) &&
+                    precedence.equals(this, other);
         } else {
             return false;
         }

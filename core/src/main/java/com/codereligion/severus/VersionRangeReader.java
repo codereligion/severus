@@ -9,13 +9,13 @@ import javax.annotation.concurrent.Immutable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.codereligion.severus.PatternVersionReader.SHORT;
+import static com.codereligion.severus.VersionReader.SHORT;
 import static java.util.regex.Pattern.compile;
 
 @Immutable
-final class PatternVersionRangeReader implements Reader<VersionRange> {
+final class VersionRangeReader implements Reader<VersionRange> {
     
-    private final Reader<Version> reader = new PatternVersionReader();
+    private final Reader<Version> reader = new VersionReader();
     
     private static final Pattern SINGLE = compile("\\[(.+)\\]");
     private static final Pattern DOUBLE = compile("([\\[\\(])(.*?),(.*?)([\\)\\]])");

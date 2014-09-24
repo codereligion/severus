@@ -49,7 +49,8 @@ public final class BuildMetadata implements Tuple<Name> {
         if (this == that) {
             return true;
         } else if (that instanceof BuildMetadata) {
-            return elementsEqual(this, (BuildMetadata) that);
+            final BuildMetadata other = (BuildMetadata) that;
+            return elementsEqual(this, other);
         } else {
             return false;
         }
@@ -64,7 +65,7 @@ public final class BuildMetadata implements Tuple<Name> {
         return EMPTY;
     }
 
-    // TODO should be in PatternVersionReader
+    // TODO should be in VersionReader
     public static BuildMetadata valueOf(final String build) {
         checkNotNull(build, "BuildMetadata");
         

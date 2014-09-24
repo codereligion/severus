@@ -10,7 +10,7 @@ import static com.google.common.base.Strings.nullToEmpty;
 import static java.util.regex.Pattern.compile;
 
 @Immutable
-final class PatternVersionReader implements Reader<Version> {
+final class VersionReader implements Reader<Version> {
 
     private static final Pattern VERSION_NUMBER = compile("0|[1-9][0-9]*");
     private static final Pattern PATCH = compile("(" + VERSION_NUMBER + ")");
@@ -48,7 +48,7 @@ final class PatternVersionReader implements Reader<Version> {
 
         if (!matcher.matches()) {
             throw new VersionFormatException(version + " is not a valid version\n" + 
-            "Should match: " + pattern);
+                    "Should match: " + pattern);
         }
 
         final VersionBuilder builder = Version.builder();

@@ -49,7 +49,8 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>> {
         if (this == that) {
             return true;
         } else if (that instanceof PreReleaseVersion) {
-            return elementsEqual(this, (PreReleaseVersion) that);
+            final PreReleaseVersion other = (PreReleaseVersion) that;
+            return elementsEqual(this, other);
         } else {
             return false;
         }
@@ -64,7 +65,7 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>> {
         return EMPTY;
     }
 
-    // TODO should be in PatternVersionReader
+    // TODO should be in VersionReader
     public static PreReleaseVersion valueOf(final String version) {
         checkNotNull(version, "Version");
         
