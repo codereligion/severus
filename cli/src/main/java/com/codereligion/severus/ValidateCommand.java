@@ -8,7 +8,9 @@ final class ValidateCommand implements Command {
             Version.valueOf(options.getInput());
             return 0;
         } catch (VersionFormatException e) {
-            // TODO print error (if requested)
+            if (options.isVerbose()) {
+                System.err.println(e.getMessage());
+            }
             return 1;
         }
     }

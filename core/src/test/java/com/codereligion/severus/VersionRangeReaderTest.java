@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
-public final class VersionRangeParserTest {
+public final class VersionRangeReaderTest {
 
     // TODO precedence?
     private final VersionRange unit;
@@ -20,7 +20,7 @@ public final class VersionRangeParserTest {
     private final Iterable<Version> includes;
     private final Iterable<Version> excludes;
 
-    public VersionRangeParserTest(String range, List<String> includes, List<String> excludes) {
+    public VersionRangeReaderTest(String range, List<String> includes, List<String> excludes) {
         this.unit = VersionRange.valueOf(range);
         this.includes = from(includes).transform(Version.converter());
         this.excludes = from(excludes).transform(Version.converter());

@@ -14,6 +14,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import static com.codereligion.severus.VersionPrecedence.NATURAL;
+import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 
 public final class Main {
 
@@ -27,6 +28,7 @@ public final class Main {
         parser.version(extractFromManifest("Version"));
 
         parser.addArgument("--version").action(Arguments.version());
+        parser.addArgument("-v", "--verbose").action(storeTrue());
 
         final Subparsers commands = parser.addSubparsers();
 
@@ -35,7 +37,7 @@ public final class Main {
         parse.addArgument("version").required(true);
         final Argument format = parse.addArgument("-f", "--format").type(FormatType.INSTANCE);
         format.setDefault(Format.TEXT).choices(FormatType.INSTANCE);
-        parse.addArgument("-p", "--pretty").action(Arguments.storeTrue());
+        parse.addArgument("-p", "--pretty").action(storeTrue());
 
         final Subparser contains = commands.addParser("contains");
         contains.setDefault("command", new ContainsCommand());

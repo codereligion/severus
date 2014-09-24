@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public final class VersionRangeParserExceptionTest {
+public final class VersionRangeReaderExceptionTest {
     
     private final String range;
 
-    public VersionRangeParserExceptionTest(String range) {
+    public VersionRangeReaderExceptionTest(String range) {
         this.range = range;
     }
 

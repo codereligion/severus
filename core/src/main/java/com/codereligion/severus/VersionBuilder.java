@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class VersionBuilder {
     
-    private final Parser<Version> parser = new PatternVersionParser();
-    
     private VersionNumber major = VersionNumber.valueOf(0);
     private VersionNumber minor = VersionNumber.valueOf(0);
     private VersionNumber patch = VersionNumber.valueOf(0);
@@ -17,19 +15,15 @@ public final class VersionBuilder {
         // should only be accessible from static factory method
     }
 
-    // TODO still needed? what about a static of(Version) method?
-    @Deprecated
-    public VersionBuilder parse(String version) throws VersionFormatException {
+    public VersionBuilder copy(Version version) throws VersionFormatException {
         checkNotNull(version, "Version");
 
-        final Version v = parser.parse(version, precedence);
-        
-        major(v.getMajor());
-        minor(v.getMinor());
-        patch(v.getPatch());
-        preRelease(v.getPreRelease());
-        build(v.getBuild());
-        precedence(v.getPrecedence());
+        major(version.getMajor());
+        minor(version.getMinor());
+        patch(version.getPatch());
+        preRelease(version.getPreRelease());
+        build(version.getBuild());
+        precedence(version.getPrecedence());
         
         return this;
     }

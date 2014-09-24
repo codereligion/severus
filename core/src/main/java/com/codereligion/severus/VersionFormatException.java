@@ -9,5 +9,9 @@ public final class VersionFormatException extends RuntimeException {
     VersionFormatException(Exception e) {
         super(e);
     }
+
+    public VersionFormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

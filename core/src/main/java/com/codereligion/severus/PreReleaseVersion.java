@@ -64,6 +64,7 @@ public final class PreReleaseVersion implements Tuple<Identifier<?>> {
         return EMPTY;
     }
 
+    // TODO should be in PatternVersionReader
     public static PreReleaseVersion valueOf(final String version) {
         checkNotNull(version, "Version");
         

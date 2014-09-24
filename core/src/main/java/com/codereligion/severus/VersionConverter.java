@@ -10,7 +10,7 @@ final class VersionConverter extends Converter<String, Version> {
 
     private final Joiner dot = Joiner.on('.');
     
-    private final Parser<Version> parser = new PatternVersionParser();
+    private final Reader<Version> reader = new PatternVersionReader();
     private final VersionPrecedence precedence;
 
     VersionConverter(VersionPrecedence precedence) {
@@ -19,7 +19,7 @@ final class VersionConverter extends Converter<String, Version> {
 
     @Override
     protected Version doForward(String version) {
-        return parser.parse(version, precedence);
+        return reader.read(version, precedence);
     }
 
     @Override
